@@ -40,6 +40,7 @@ namespace HDInsight.Tests
         [Fact]
         public void TestScriptActionsOnRunningCluster()
         {
+#pragma warning disable 612,618
             var handler = new RecordedDelegatingHandler { StatusCodeToReturn = HttpStatusCode.OK };
 
             using (var context = UndoContext.Current)
@@ -137,6 +138,7 @@ namespace HDInsight.Tests
                    client.Clusters.Delete(resourceGroup, dnsName);
                 }
             }
+#pragma warning restore 612,618
         }
 
         [Fact]
@@ -271,6 +273,7 @@ namespace HDInsight.Tests
 
         private ClusterCreateParameters CreateClusterToValidateScriptActions(string resourceGroup, string dnsName, HDInsightManagementClient client)
         {
+#pragma warning disable 612,618
             var clusterCreateParams = GetClusterSpecHelpers.GetCustomCreateParametersIaas();
 
             client.Clusters.Create(resourceGroup, dnsName, clusterCreateParams);
@@ -297,6 +300,7 @@ namespace HDInsight.Tests
                 }
             }
 
+#pragma warning restore 612,618
             return clusterCreateParams;
         }
 

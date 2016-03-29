@@ -15,8 +15,10 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Azure.Management.HDInsight.CustomizationsModels;
 using Microsoft.Azure.Management.HDInsight.Models;
 using Newtonsoft.Json;
+using Microsoft.Azure.Management.HDInsight.CustomizationModels;
 
 namespace HDInsight.Tests.Helpers
 {
@@ -214,6 +216,7 @@ namespace HDInsight.Tests.Helpers
 
         public static ClusterCreateParameters GetCustomCreateParametersPaas()
         {
+            #pragma warning disable 612,618
             var clusterparams = new ClusterCreateParameters
             {
                 ClusterSizeInNodes = 3,
@@ -233,11 +236,13 @@ namespace HDInsight.Tests.Helpers
             clusterparams.ScriptActions.Add(ClusterNodeType.WorkerNode, actions);
             clusterparams.ScriptActions.Add(ClusterNodeType.HeadNode, actions);
 
+            #pragma warning restore 612,618
             return clusterparams;
         }
 
         public static ClusterCreateParameters GetCustomCreateParametersIaas()
         {
+#pragma warning disable 612,618
             var clusterparams = new ClusterCreateParameters
             {
                 ClusterSizeInNodes = 3,
@@ -254,11 +259,50 @@ namespace HDInsight.Tests.Helpers
                 SshPassword = SshPassword,
                 Version = "3.2"
             };
+#pragma warning restore 612,618
+            return clusterparams;
+        }
+
+        /* This will be used once DataLakeStorageInfo.cs is enabled
+        public static ClusterCreateParameters GetDataLakeDefaultFsCreateParametersIaas()
+        {
+            var adlStorageInfo = new DataLakeStorageInfo("hdiadl.azuredatalakestore.net");
+
+            return GetDefaultFsCreateParametersIaas(adlStorageInfo);
+        }
+         */
+
+        public static ClusterCreateParameters GetAzureBlobDefaultFsCreateParametersIaas()
+        {
+            // Filling parameters, since they cannot be null.
+            var wasbStorageInfo = new AzureStorageInfo("hdisdktest.blob.core.windows.net", "hdisdktestpass", "hdisdk-defaultfsazureblob");
+
+            return GetDefaultFsCreateParametersIaas(wasbStorageInfo);
+        }
+
+        private static ClusterCreateParameters GetDefaultFsCreateParametersIaas(IStorageInfo defaultStorageInfo)
+        {
+            var clusterparams = new ClusterCreateParameters
+            {
+                ClusterSizeInNodes = 3,
+                ClusterType = "Hadoop",
+                WorkerNodeSize = "Large",
+                DefaultStorageInfo = defaultStorageInfo,
+                OSType = OSType.Linux,
+                UserName = HttpUser,
+                Password = HttpPassword,
+                Location = "East US 2",
+                SshUserName = SshUser,
+                SshPassword = SshPassword,
+                Version = "3.2"
+            };
+
             return clusterparams;
         }
 
         public static ClusterCreateParameters GetCustomVmSizesCreateParametersIaas()
         {
+#pragma warning disable 612,618
             var clusterparams = new ClusterCreateParameters
             {
                 ClusterSizeInNodes = 1,
@@ -277,6 +321,7 @@ namespace HDInsight.Tests.Helpers
                 HeadNodeSize = "ExtraLarge",
                 ZookeeperNodeSize = "Large",
             };
+#pragma warning restore 612,618
             return clusterparams;
         }
 

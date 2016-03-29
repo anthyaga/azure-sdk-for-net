@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Hyak.Common;
+using Microsoft.Azure.Management.HDInsight.CustomizationModels;
 using Microsoft.Azure.Management.HDInsight.Models;
 using Newtonsoft.Json;
 
@@ -105,7 +106,7 @@ namespace Microsoft.Azure.Management.HDInsight
                     OperatingSystemType = clusterCreateParameters.OSType
                 }
             };
-
+             
             var configurations = GetConfigurations(clusterName, clusterCreateParameters);
 
             if (clusterCreateParameters.HiveMetastore != null)
@@ -236,6 +237,9 @@ namespace Microsoft.Azure.Management.HDInsight
         private static Dictionary<string, Dictionary<string, string>> GetConfigurations(string clusterName,
             ClusterCreateParameters clusterCreateParameters)
         {
+            // Disabling Obselete error ( ClusterCreateParameters.DefaultStorageAccountName, DefaultStorageAccountKey, DefaultStorageContainer)
+            #pragma warning disable 612,618
+
             var configurations = clusterCreateParameters.Configurations;
 
             //Core Config
@@ -260,15 +264,35 @@ namespace Microsoft.Azure.Management.HDInsight
                 var container = !string.IsNullOrEmpty(clusterCreateParameters.DefaultStorageContainer)
                     ? clusterCreateParameters.DefaultStorageContainer
                     : clusterName;
-                coreConfig.Add(storageAccountNameKey,
-                    string.Format("wasb://{0}@{1}", container, clusterCreateParameters.DefaultStorageAccountName));
+
+                var storageAccountNameValue = clusterCreateParameters.DefaultStorageInfo != null
+                        ? clusterCreateParameters.DefaultStorageInfo.GetStorageAccountUri()
+                        : string.Format("wasb://{0}@{1}", container, clusterCreateParameters.DefaultStorageAccountName);
+
+                coreConfig.Add(storageAccountNameKey, storageAccountNameValue);
             }
 
-            var defaultStorageConfigKey = string.Format("fs.azure.account.key.{0}",
-                clusterCreateParameters.DefaultStorageAccountName);
-            if (!coreConfig.ContainsKey(defaultStorageConfigKey))
+            string defaultStorageConfigKey = null;
+            string storageAccountKey = null;
+            if (clusterCreateParameters.DefaultStorageInfo != null)
             {
-                coreConfig.Add(defaultStorageConfigKey, clusterCreateParameters.DefaultStorageAccountKey);
+                if (clusterCreateParameters.DefaultStorageInfo.GetStorageAccountKeyValue() != null)
+                {
+                    defaultStorageConfigKey = string.Format("fs.azure.account.key.{0}",
+                        clusterCreateParameters.DefaultStorageInfo.StorageAccountName);
+
+                    storageAccountKey = clusterCreateParameters.DefaultStorageInfo.GetStorageAccountKeyValue();
+                }
+            }
+            else
+            {
+                defaultStorageConfigKey = string.Format("fs.azure.account.key.{0}", clusterCreateParameters.DefaultStorageAccountName);
+                storageAccountKey = clusterCreateParameters.DefaultStorageAccountKey;
+            }
+
+            if (!string.IsNullOrEmpty(storageAccountKey))
+            {
+                coreConfig.Add(defaultStorageConfigKey, storageAccountKey);
             }
 
             foreach (var storageAccount in clusterCreateParameters.AdditionalStorageAccounts)
@@ -342,7 +366,7 @@ namespace Microsoft.Azure.Management.HDInsight
                     configurations[ConfigurationKey.ClusterIdentity] = datalakeConfig;
                 }
             }
-
+            #pragma warning restore 612,618
             return configurations;
         }
 
