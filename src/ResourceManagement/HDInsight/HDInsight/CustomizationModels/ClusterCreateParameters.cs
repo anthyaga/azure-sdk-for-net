@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Azure.Management.HDInsight.CustomizationsModels;
 
 namespace Microsoft.Azure.Management.HDInsight.Models
 {
@@ -32,6 +33,7 @@ namespace Microsoft.Azure.Management.HDInsight.Models
         /// This account will be used for schemaless paths and the cluster will 
         /// leverage to store some cluster level files.
         /// </summary>
+        [ObsoleteAttribute("This property is deprecated, please use AzureStorageInfo with the DefaultStorageInfo parameter instead.", false)]
         public string DefaultStorageAccountName { get; set; }
 
         /// <summary>
@@ -39,6 +41,7 @@ namespace Microsoft.Azure.Management.HDInsight.Models
         /// This account will be used for schemaless paths and the cluster will 
         /// leverage to store some cluster level files.
         /// </summary>
+        [ObsoleteAttribute("This property is deprecated, please use AzureStorageInfo with the DefaultStorageInfo parameter instead.", false)]
         public string DefaultStorageAccountKey { get; set; }
 
         /// <summary>
@@ -46,6 +49,7 @@ namespace Microsoft.Azure.Management.HDInsight.Models
         /// This account will be used for schemaless paths and the cluster will 
         /// leverage to store some cluster level files.
         /// </summary>
+        [ObsoleteAttribute("This property is deprecated, please use AzureStorageInfo with the DefaultStorageInfo parameter instead.", false)]
         public string DefaultStorageContainer { get; set; }
 
         /// <summary>
@@ -108,7 +112,7 @@ namespace Microsoft.Azure.Management.HDInsight.Models
         public string ZookeeperNodeSize { get; set; }
 
         /// <summary>
-        /// Gets additional Azure Storage Account that you want to enable access to.
+        /// Gets additional Azure Blob Storage Account that you want to enable access to.
         /// </summary>
         public Dictionary<string, string> AdditionalStorageAccounts { get; private set; }
 
@@ -176,6 +180,13 @@ namespace Microsoft.Azure.Management.HDInsight.Models
         /// Gets or sets the prinicipal to be used for getting OAuth2 token to access Azure DataLake (ADL)
         /// </summary>
         public Principal Principal { get; set; }
+
+        /// <summary>
+        /// The information for default storage account for the cluster.
+        /// This account will be used for schemaless paths and the cluster will 
+        /// leverage to store some cluster level files.
+        /// </summary>
+        public IStorageInfo DefaultStorageInfo { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the ClusterCreateParameters class.
