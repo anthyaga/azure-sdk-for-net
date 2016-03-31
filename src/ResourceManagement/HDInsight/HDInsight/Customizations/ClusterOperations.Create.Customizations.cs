@@ -107,7 +107,7 @@ namespace Microsoft.Azure.Management.HDInsight
                     ClusterTier = clusterCreateParameters.ClusterTier 
                 }
             };
-             
+
             var configurations = GetConfigurations(clusterName, clusterCreateParameters);
 
             if (clusterCreateParameters.HiveMetastore != null)
