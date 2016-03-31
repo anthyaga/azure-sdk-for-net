@@ -261,16 +261,7 @@ namespace HDInsight.Tests.Helpers
             };
 #pragma warning restore 612,618
             return clusterparams;
-        }
-
-        /* This will be used once DataLakeStorageInfo.cs is enabled
-        public static ClusterCreateParameters GetDataLakeDefaultFsCreateParametersIaas()
-        {
-            var adlStorageInfo = new DataLakeStorageInfo("hdiadl.azuredatalakestore.net");
-
-            return GetDefaultFsCreateParametersIaas(adlStorageInfo);
-        }
-         */
+        }       
 
         public static ClusterCreateParameters GetAzureBlobDefaultFsCreateParametersIaas()
         {

@@ -110,49 +110,7 @@ namespace HDInsight.Tests
                 Assert.Equal(createresponse.Cluster.Properties.CreatedDate, getresponse.Cluster.Properties.CreatedDate);
                 Assert.Equal(createresponse.Cluster.Name, getresponse.Cluster.Name);
             }
-        }
-
-        /* This test will be used once DataLakeStorageInfo.cs is enabled
-        [Fact]
-        public void TestCreateDefaultFsDataLakeClusterUsingClusterParameters()
-        {
-            var handler = new RecordedDelegatingHandler { StatusCodeToReturn = HttpStatusCode.OK };
-
-            using (var context = UndoContext.Current)
-            {
-                context.Start();
-
-                //get clients
-                var client = HDInsightManagementTestUtilities.GetHDInsightManagementClient(handler);
-                var resourceManagementClient = HDInsightManagementTestUtilities.GetResourceManagementClient(handler);
-
-                //create resourcegroup
-                var resourceGroup = HDInsightManagementTestUtilities.CreateResourceGroup(resourceManagementClient);
-
-                //set variables
-                const string dnsname = "hdisdk-defaultfsdatalake1";
-
-                var spec = GetDefaultFsDataLakeClusterParameters();
-
-                var createresponse = client.Clusters.Create(resourceGroup, dnsname, spec);
-                
-                var getresponse = client.Clusters.Get(resourceGroup, dnsname);
-                Assert.Equal(createresponse.Cluster.Properties.CreatedDate, getresponse.Cluster.Properties.CreatedDate);
-                Assert.Equal(createresponse.Cluster.Name, getresponse.Cluster.Name);
-            }
-        }
-         
-
-        private ClusterCreateParameters GetDefaultFsDataLakeClusterParameters()
-        {
-            var spec = GetClusterSpecHelpers.GetDataLakeDefaultFsCreateParametersIaas();
-
-            ServicePrincipal servicePrincipal = new ServicePrincipal(new Guid(ApplicationId), new Guid(AadTenantId), CertificateFileBytes,
-                CertificatePassword);
-            spec.Principal = servicePrincipal;
-            return spec;
-        }
-         */
+        }        
 
         private ClusterCreateParameters GetDataLakeClusterParameters()
         {

@@ -15,7 +15,8 @@ namespace HDInsight.Tests.UnitTests
             string existingStorageNameFqdn = existingStorageName + ".blob.core.windows.net";
             string existingStorageKey = "testtest==";
             string containerName = "testcontainer";
-            string existingStorageNameFqdnUri = "wasb://" + containerName +"@" + existingStorageNameFqdn;
+            string existingStorageNameFqdnUri = "wasb://" + containerName + "@" + existingStorageNameFqdn;
+            string paramErrorMessage = "Input cannot be empty\r\nParameter name: ";
 
             // Test for null input parameters
             try
@@ -24,7 +25,7 @@ namespace HDInsight.Tests.UnitTests
             }
             catch (Exception e)
             {
-                Assert.Equal(e.Message, "Input cannot be empty\r\nParameter name: storageContainer");
+                Assert.Equal(e.Message, paramErrorMessage + "storageContainer");
             }
 
             try
@@ -33,7 +34,7 @@ namespace HDInsight.Tests.UnitTests
             }
             catch (Exception e)
             {
-                Assert.Equal(e.Message, "Input cannot be empty\r\nParameter name: storageAccountName");
+                Assert.Equal(e.Message, paramErrorMessage + "storageAccountName");
             }
 
             try
@@ -42,7 +43,7 @@ namespace HDInsight.Tests.UnitTests
             }
             catch (Exception e)
             {
-                Assert.Equal(e.Message, "Input cannot be empty\r\nParameter name: storageAccountKey");
+                Assert.Equal(e.Message, paramErrorMessage + "storageAccountKey");
             }
 
             // Test for StorageAccountUri
