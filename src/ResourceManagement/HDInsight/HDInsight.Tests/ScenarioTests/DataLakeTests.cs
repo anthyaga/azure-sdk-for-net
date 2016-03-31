@@ -110,7 +110,7 @@ namespace HDInsight.Tests
                 Assert.Equal(createresponse.Cluster.Properties.CreatedDate, getresponse.Cluster.Properties.CreatedDate);
                 Assert.Equal(createresponse.Cluster.Name, getresponse.Cluster.Name);
             }
-        }        
+        }
 
         private ClusterCreateParameters GetDataLakeClusterParameters()
         {
